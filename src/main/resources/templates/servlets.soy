@@ -1,0 +1,20 @@
+{namespace servlet.ui}
+/**
+ * This template is needed to draw the example page.
+ */
+{template .example}
+    {@param pluginKey: string}
+    <html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="decorator" content="atl.general">
+        <title></title>
+        <script>
+          WRM.require('wr!{$pluginKey}:example-entry-point');
+        </script>
+    </head>
+    <body>
+        <div id="example-container"></div>
+    </body>
+    </html>
+{/template}

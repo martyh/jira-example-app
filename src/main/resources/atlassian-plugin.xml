@@ -1,0 +1,56 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="example-app"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="example-app-resources" name="example-app Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <transformation extension="soy">
+            <transformer key="soyTransformer"/>
+        </transformation>
+
+        <resource type="soy" name="soy-ui" location="templates/servlets.soy"/>
+        <resource type="download" name="example-app.css" location="/css/example-app.css"/>
+        <resource type="download" name="example-app.js" location="/js/example-app.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>example-app</context>
+    </web-resource>
+
+    <!-- The packed react application. This gets pulled into the soy template via the WRM. This is placed in this -->
+    <!-- location by the webpack build on the front end.                                                          -->
+    <web-resource key="example-entry-point">
+        <context>example-plugin-pack</context>
+        <dependency>com.atlassian.plugins.atlassian-plugins-webresource-plugin:context-path</dependency>
+
+        <resource type="download" name="example.css" location="./client/styles/example.css"/>
+        <resource type="download" name="example-pack.js" location="./client/example.pack.js"/>
+
+        <resource type="download" name="assets/" location="./client/assets"/>
+    </web-resource>
+
+    <!-- Servlet for the example page. This is used to drop the react app onto the page when you                -->
+    <!-- click the link in the top nav.                                                                         -->
+    <servlet name="Example Servlet" i18n-name-key="example-servlet.name" key="example-servlet"
+             class="com.teamswork.collab.servlet.ExampleServlet">
+        <description key="example-servlet.description">The example servlet</description>
+        <url-pattern>/ex</url-pattern>
+    </servlet>
+
+    <!-- Links at the top of the nav bar. -->
+    <web-section name="Example Main Section" i18n-name-key="example-main-section.name" key="example_links_section"
+                 location="example_links_link" weight="10"/>
+    <web-item key="example_links_link" name="Example link on main section" section="system.top.navigation.bar" weight="47">
+        <label>Example</label>
+        <link linkId="example_links_link-top">/plugins/servlet/ex</link>
+    </web-item>
+
+</atlassian-plugin>
